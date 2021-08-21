@@ -1,11 +1,37 @@
 var MSIRender = /** @class */ (function () {
-    function MSIRender(pixels, w, h) {
+    function MSIRender(mz, pixels, w, h) {
         this.pixels = pixels;
         this.dimension = { w: w, h: h };
+        this.mz = mz;
     }
     MSIRender.prototype.renderMz = function (mz, da, target) {
         if (da === void 0) { da = 0.1; }
         if (target === void 0) { target = "#ms-imaging"; }
+        var layer = this.loadLayer(mz, da);
+    };
+    MSIRender.prototype.loadLayer = function (mz, da) {
+        var layer = [];
+        for (var _i = 0, _a = this.pixels; _i < _a.length; _i++) {
+            var pixel = _a[_i];
+            var intensity = MSIRender.PixelValue(pixel, mz, da);
+            if (intensity > 0) {
+                layer.push({
+                    x: pixel.x, y: pixel.y, intensity: intensity
+                });
+            }
+        }
+        return layer;
+    };
+    MSIRender.PixelValue = function (pixel, mz, da) {
+        var maxIntensity = 0;
+        for (var i = 0; i < pixel.mz.length; i++) {
+            if (Math.abs(pixel.mz[i] - mz) <= da) {
+                if (pixel.intensity[i] > maxIntensity) {
+                    maxIntensity = pixel.intensity[i];
+                }
+            }
+        }
+        return maxIntensity;
     };
     return MSIRender;
 }());
@@ -36,7 +62,8 @@ function createMSIRender(cdf) {
         .ToArray();
     var w = parseInt(cdf.getAttribute("width").toString());
     var h = parseInt(cdf.getAttribute("height").toString());
-    return new MSIRender(pixels, w, h);
+    var uniqMz = $from(TypeScript.Data.group(mz, 0.05)).Select(function (i) { return i.Key; }).ToArray();
+    return new MSIRender(uniqMz, pixels, w, h);
 }
 var mzPack = /** @class */ (function () {
     function mzPack() {

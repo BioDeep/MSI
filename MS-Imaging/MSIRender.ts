@@ -4,9 +4,10 @@ class MSIRender {
     pixels: Pixel[];
     mz: number[];
 
-    constructor(pixels: Pixel[], w: number, h: number) {
+    constructor(mz: number[], pixels: Pixel[], w: number, h: number) {
         this.pixels = pixels;
         this.dimension = { w: w, h: h };
+        this.mz = mz;
     }
 
     renderMz(mz: number, da: number = 0.1, target = "#ms-imaging") {

@@ -7,8 +7,11 @@ declare class MSIRender {
         h: number;
     };
     pixels: Pixel[];
-    constructor(pixels: Pixel[], w: number, h: number);
+    mz: number[];
+    constructor(mz: number[], pixels: Pixel[], w: number, h: number);
     renderMz(mz: number, da?: number, target?: string): void;
+    loadLayer(mz: number, da: number): PixelData[];
+    static PixelValue(pixel: Pixel, mz: number, da: number): number;
 }
 declare function loadNetCDF(url: string, render: (r: MSIRender) => void): void;
 declare function createMSIRender(cdf: NetCDFReader): MSIRender;
@@ -17,6 +20,11 @@ interface Pixel {
     y: number;
     mz: number[];
     intensity: number[];
+}
+interface PixelData {
+    x: number;
+    y: number;
+    intensity: number;
 }
 declare class mzPack {
 }
