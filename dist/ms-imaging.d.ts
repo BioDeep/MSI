@@ -12,6 +12,7 @@ declare class MSIRender {
     renderMz(mz: number, da?: number, target?: string): void;
     renderRGB(r: number, g: number, b: number, da?: number, scale?: number[], target?: string): void;
     private MergeLayers;
+    private static level;
     loadLayer(mz: number, da: number): PixelData[];
     static PixelValue(pixel: Pixel, mz: number, da: number): number;
 }

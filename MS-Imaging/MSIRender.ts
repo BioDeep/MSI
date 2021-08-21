@@ -50,15 +50,25 @@ class MSIRender {
             const bx = $from(b).Where(p => p.x == x);
 
             for (let y: number = 1; y <= this.dimension.h; y++) {
-                const cr = rx.Where(p => p.y == y).FirstOrDefault()?.level || 0;
-                const cg = gx.Where(p => p.y == y).FirstOrDefault()?.level || 0;
-                const cb = bx.Where(p => p.y == y).FirstOrDefault()?.level || 0;
+                const cr: number = MSIRender.level(rx, y);
+                const cg: number = MSIRender.level(gx, y);
+                const cb: number = MSIRender.level(bx, y);
 
                 layer.push({ x: x, y: y, color: [cr, cg, cb] });
             }
         }
 
         return layer;
+    }
+
+    private static level(x: IEnumerator<PixelData>, y: number): number {
+        const pixel: PixelData = x.Where(p => p.y == y).FirstOrDefault();
+
+        if (isNullOrUndefined(pixel)) {
+            return 0;
+        } else {
+            return pixel.level;
+        }
     }
 
     loadLayer(mz: number, da: number) {

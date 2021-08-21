@@ -40,14 +40,11 @@ var MSIRender = /** @class */ (function () {
             var rx = $from(r).Where(function (p) { return p.x == x; });
             var gx = $from(g).Where(function (p) { return p.x == x; });
             var bx = $from(b).Where(function (p) { return p.x == x; });
-            var _loop_2 = function (y) {
-                var cr = rx.Where(function (p) { return p.y == y; }).FirstOrDefault() ? .level || 0 : ;
-                var cg = gx.Where(function (p) { return p.y == y; }).FirstOrDefault() ? .level || 0 : ;
-                var cb = bx.Where(function (p) { return p.y == y; }).FirstOrDefault() ? .level || 0 : ;
-                layer.push({ x: x, y: y, color: [cr, cg, cb] });
-            };
             for (var y = 1; y <= this_1.dimension.h; y++) {
-                _loop_2(y);
+                var cr = MSIRender.level(rx, y);
+                var cg = MSIRender.level(gx, y);
+                var cb = MSIRender.level(bx, y);
+                layer.push({ x: x, y: y, color: [cr, cg, cb] });
             }
         };
         var this_1 = this;
@@ -55,6 +52,15 @@ var MSIRender = /** @class */ (function () {
             _loop_1(x);
         }
         return layer;
+    };
+    MSIRender.level = function (x, y) {
+        var pixel = x.Where(function (p) { return p.y == y; }).FirstOrDefault();
+        if (isNullOrUndefined(pixel)) {
+            return 0;
+        }
+        else {
+            return pixel.level;
+        }
     };
     MSIRender.prototype.loadLayer = function (mz, da) {
         var layer = [];
