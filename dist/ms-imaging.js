@@ -27,8 +27,8 @@ function createMSIRender(cdf) {
         .GroupBy(function (a) { return a[2] + "-" + a[3]; })
         .Select(function (mzlist) {
         return {
-            x: mzlist[0][2],
-            y: mzlist[0][3],
+            x: mzlist.ElementAt(0)[2],
+            y: mzlist.ElementAt(0)[3],
             mz: mzlist.Select(function (i) { return i[0]; }).ToArray(),
             intensity: mzlist.Select(function (i) { return i[1]; }).ToArray()
         };

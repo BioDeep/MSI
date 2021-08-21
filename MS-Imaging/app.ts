@@ -18,8 +18,8 @@ function createMSIRender(cdf: NetCDFReader): MSIRender {
         .GroupBy(a => `${a[2]}-${a[3]}`)
         .Select(function (mzlist) {
             return <Pixel>{
-                x: mzlist[0][2],
-                y: mzlist[0][3],
+                x: mzlist.ElementAt(0)[2],
+                y: mzlist.ElementAt(0)[3],
                 mz: mzlist.Select(i => i[0]).ToArray(),
                 intensity: mzlist.Select(i => i[1]).ToArray()
             }
