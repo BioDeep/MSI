@@ -186,7 +186,7 @@ declare class Graphics {
     /**
      * Draw a basic svg rectangle shape
     */
-    drawRectangle(rect: Canvas.Rectangle, border?: Canvas.Pen, fill?: Canvas.Color, id?: string, className?: string): Graphics;
+    drawRectangle(rect: Canvas.Rectangle, border?: Canvas.Pen, fill?: Canvas.Color, onclick?: Delegate.Action, id?: string, className?: string): Graphics;
     /**
      * The ``<path>`` SVG element is the generic element to define a shape.
      * All the basic shapes can be created with a path element.

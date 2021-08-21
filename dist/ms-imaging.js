@@ -9,10 +9,11 @@ var MSIRender = /** @class */ (function () {
         if (target === void 0) { target = "#ms-imaging"; }
         var layer = this.loadLayer(mz, da);
     };
-    MSIRender.prototype.renderRGB = function (r, g, b, da, scale, target) {
+    MSIRender.prototype.renderRGB = function (r, g, b, da, scale, target, handlePixel) {
         if (da === void 0) { da = 0.1; }
         if (scale === void 0) { scale = [5, 5]; }
         if (target === void 0) { target = "#ms-imaging"; }
+        if (handlePixel === void 0) { handlePixel = null; }
         var R = this.loadLayer(r, da);
         var G = this.loadLayer(g, da);
         var B = this.loadLayer(b, da);
@@ -25,18 +26,36 @@ var MSIRender = /** @class */ (function () {
         var width = this.dimension.w * scale[0];
         var height = this.dimension.h * scale[1];
         var svg = new Graphics($ts(target)).size(width, height);
-        for (var _i = 0, _a = this.MergeLayers(R, G, B); _i < _a.length; _i++) {
-            var p = _a[_i];
+        var vm = this;
+        var _loop_1 = function (p) {
             var rect = new Canvas.Rectangle((p.x - 1) * scale[0], (p.y - 1) * scale[1], scale[0], scale[1]);
             var color = new Canvas.Color(p.color[0], p.color[1], p.color[2]);
             var border = new Canvas.Pen(color, 1);
-            svg.drawRectangle(rect, border, color);
+            svg.drawRectangle(rect, border, color, function () {
+                var pixel = vm.FindPixel(p.x, p.y);
+                if ((!pixel) && (!handlePixel)) {
+                    handlePixel(pixel);
+                }
+            });
+        };
+        for (var _i = 0, _a = this.MergeLayers(R, G, B); _i < _a.length; _i++) {
+            var p = _a[_i];
+            _loop_1(p);
         }
         console.log(svg);
     };
+    MSIRender.prototype.FindPixel = function (x, y) {
+        for (var _i = 0, _a = this.pixels; _i < _a.length; _i++) {
+            var p = _a[_i];
+            if (x == p.x && y == p.y) {
+                return p;
+            }
+        }
+        return null;
+    };
     MSIRender.prototype.MergeLayers = function (r, g, b) {
         var layer = [];
-        var _loop_1 = function (x) {
+        var _loop_2 = function (x) {
             var rx = $from(r).Where(function (p) { return p.x == x; });
             var gx = $from(g).Where(function (p) { return p.x == x; });
             var bx = $from(b).Where(function (p) { return p.x == x; });
@@ -49,7 +68,7 @@ var MSIRender = /** @class */ (function () {
         };
         var this_1 = this;
         for (var x = 1; x <= this.dimension.w; x++) {
-            _loop_1(x);
+            _loop_2(x);
         }
         return layer;
     };

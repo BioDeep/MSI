@@ -283,6 +283,10 @@ var Graphics = /** @class */ (function () {
      * @param div div id
     */
     function Graphics(div) {
+        /**
+         * The css z-index layer order
+        */
+        this.z = 1;
         this.svg = SvgUtils.svgNode("svg", { "version": "1.1" });
         this.container = typeof div == "string" ? document.getElementById(div) : div;
         this.container.appendChild(this.svg);
@@ -389,9 +393,10 @@ var Graphics = /** @class */ (function () {
     /**
      * Draw a basic svg rectangle shape
     */
-    Graphics.prototype.drawRectangle = function (rect, border, fill, id, className) {
+    Graphics.prototype.drawRectangle = function (rect, border, fill, onclick, id, className) {
         if (border === void 0) { border = Canvas.Pens.Black(); }
         if (fill === void 0) { fill = null; }
+        if (onclick === void 0) { onclick = null; }
         if (id === void 0) { id = null; }
         if (className === void 0) { className = null; }
         var attrs = {
@@ -408,6 +413,7 @@ var Graphics = /** @class */ (function () {
         if (fill)
             attrs["fill"] = fill.ToHtmlColor();
         var node = border.Styling(SvgUtils.svgNode("rect", attrs));
+        node.onclick = onclick;
         this.svg.appendChild(node);
         return this;
     };

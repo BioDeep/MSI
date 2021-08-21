@@ -14,7 +14,7 @@ class MSIRender {
         const layer = this.loadLayer(mz, da);
     }
 
-    renderRGB(r: number, g: number, b: number, da: number = 0.1, scale = [5, 5], target: string = "#ms-imaging") {
+    renderRGB(r: number, g: number, b: number, da: number = 0.1, scale = [5, 5], target: string = "#ms-imaging", handlePixel: ClickPixel = null) {
         const R = this.loadLayer(r, da);
         const G = this.loadLayer(g, da);
         const B = this.loadLayer(b, da);
@@ -29,16 +29,33 @@ class MSIRender {
         const width = this.dimension.w * scale[0];
         const height = this.dimension.h * scale[1];
         const svg = new Graphics($ts(target)).size(width, height);
+        const vm = this;
 
         for (let p of this.MergeLayers(R, G, B)) {
             const rect = new Canvas.Rectangle((p.x - 1) * scale[0], (p.y - 1) * scale[1], scale[0], scale[1]);
             const color = new Canvas.Color(p.color[0], p.color[1], p.color[2]);
             const border = new Canvas.Pen(color, 1);
 
-            svg.drawRectangle(rect, border, color);
+            svg.drawRectangle(rect, border, color, function () {
+                const pixel: Pixel = vm.FindPixel(p.x, p.y);
+
+                if ((!pixel) && (!handlePixel)) {
+                    handlePixel(pixel);
+                }
+            });
         }
 
         console.log(svg);
+    }
+
+    FindPixel(x: number, y: number): Pixel {
+        for (let p of this.pixels) {
+            if (x == p.x && y == p.y) {
+                return p;
+            }
+        }
+
+        return null;
     }
 
     private MergeLayers(r: PixelData[], g: PixelData[], b: PixelData[]) {

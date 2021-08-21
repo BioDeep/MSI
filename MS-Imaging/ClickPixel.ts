@@ -1,0 +1,1 @@
+interface ClickPixel { (pixel: Pixel): void; }
