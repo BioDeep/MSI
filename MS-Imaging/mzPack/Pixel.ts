@@ -6,3 +6,9 @@ interface Pixel {
     mz: number[];
     intensity: number[];
 }
+
+interface PixelData {
+    x: number;
+    y: number;
+    intensity: number;
+}

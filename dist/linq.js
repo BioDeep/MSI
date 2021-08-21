@@ -6357,6 +6357,54 @@ var TypeScript;
 (function (TypeScript) {
     var Data;
     (function (Data) {
+        var BSpline;
+        (function (BSpline) {
+            function deBoor(controlPoints, t, d, u, j) {
+                var arr = controlPoints.map(function (i) { return i.slice(); });
+                var length = t[j + 2] - t[j + 1];
+                u *= length;
+                u += t[j + 1];
+                for (var h = 0; h < d; h++) {
+                    for (var i = 0; i < d - h; i++) {
+                        var low = j + i + h - (d - 2), //(d-2) is a hack, maybe not suitable for d > 3
+                        high = low + d - h, l = (t[low] !== t[high]) ? (u - t[low]) / (t[high] - t[low]) : 0;
+                        for (var p = 0; p < arr[0].length; p++) {
+                            arr[i][p] = (1 - l) * arr[i][p] + l * arr[i + 1][p];
+                        }
+                    }
+                }
+                return arr[0];
+            }
+            function getControlPoints(controlPoints, degree, index) {
+                var arr = new Array(degree + 1);
+                for (var i = index; i < index + degree + 1; i++) {
+                    arr[i - index] = controlPoints[i].slice();
+                }
+                return arr;
+            }
+            function interpolation(controlPoints, knots, tesselation) {
+                var d = knots.length - controlPoints.length - 1; //degree
+                if (controlPoints.length <= d) {
+                    throw new TypeError("cp.length < d, k === cp + d + 1");
+                }
+                var b = new Array(tesselation * (controlPoints.length - d) + 1); //spline
+                for (var j = d - 1; j < controlPoints.length - 1; j++) { //knot index
+                    var cp = getControlPoints(controlPoints, d, j - d + 1);
+                    for (var i = 0; i < tesselation; i++) {
+                        b[i + (j - d + 1) * tesselation] = deBoor(cp, knots, d, i / tesselation, j);
+                    }
+                }
+                b[b.length - 1] = deBoor(getControlPoints(controlPoints, d, j - d), knots, d, 1, j - 1); //end point
+                return b.map(function (i) { return ({ x: i[0], y: i[1] }); });
+            }
+            BSpline.interpolation = interpolation;
+        })(BSpline = Data.BSpline || (Data.BSpline = {}));
+    })(Data = TypeScript.Data || (TypeScript.Data = {}));
+})(TypeScript || (TypeScript = {}));
+var TypeScript;
+(function (TypeScript) {
+    var Data;
+    (function (Data) {
         /**
          * 这个对象可以自动的将调用者的函数名称作为键名进行对应的键值的读取操作
         */
@@ -6390,6 +6438,32 @@ var TypeScript;
             return MetaReader;
         }());
         Data.MetaReader = MetaReader;
+    })(Data = TypeScript.Data || (TypeScript.Data = {}));
+})(TypeScript || (TypeScript = {}));
+var TypeScript;
+(function (TypeScript) {
+    var Data;
+    (function (Data) {
+        function group(x, offset) {
+            var groups = [];
+            for (var _i = 0, x_1 = x; _i < x_1.length; _i++) {
+                var d = x_1[_i];
+                var hit = false;
+                for (var _a = 0, groups_1 = groups; _a < groups_1.length; _a++) {
+                    var n = groups_1[_a];
+                    if (Math.abs(n.Key - d) <= offset) {
+                        hit = true;
+                        n.Group.push(d);
+                        break;
+                    }
+                }
+                if (!hit) {
+                    groups.push(new Group(d, [d]));
+                }
+            }
+            return groups;
+        }
+        Data.group = group;
     })(Data = TypeScript.Data || (TypeScript.Data = {}));
 })(TypeScript || (TypeScript = {}));
 /// <reference path="../Collections/Abstract/Enumerator.ts" />

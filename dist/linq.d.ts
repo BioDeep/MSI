@@ -2262,6 +2262,13 @@ declare namespace TypeScript.Data {
         toString(): string;
     }
 }
+declare namespace TypeScript.Data.BSpline {
+    interface xy {
+        x: number;
+        y: number;
+    }
+    function interpolation(controlPoints: [][], knots: number[], tesselation: number): xy[];
+}
 declare namespace TypeScript.Data {
     /**
      * 这个对象可以自动的将调用者的函数名称作为键名进行对应的键值的读取操作
@@ -2282,6 +2289,9 @@ declare namespace TypeScript.Data {
         */
         GetValue(key?: string): any;
     }
+}
+declare namespace TypeScript.Data {
+    function group(x: number[], offset: number): Group<number, number>[];
 }
 declare namespace TypeScript.Data {
     class PriorityQueue<T> extends IEnumerator<QueueItem<T>> {

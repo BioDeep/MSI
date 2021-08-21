@@ -27,6 +27,7 @@ function createMSIRender(cdf: NetCDFReader): MSIRender {
         .ToArray();
     const w: number = parseInt(cdf.getAttribute("width").toString());
     const h: number = parseInt(cdf.getAttribute("height").toString());
+    const uniqMz = 
 
     return new MSIRender(pixels, w, h);
 }
