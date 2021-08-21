@@ -22,26 +22,22 @@
     loadNetCDF("./HR2MSI mouse urinary bladder S096 - Figure1.cdf", function (MSI) {
         console.log(MSI);
 
-        const opts = RenderOptions(
-     0.3,
-     [8, 8],
-     PuBuGn,
-     "#canvas",
-     function (pixel) {
-            $ts("#MS").clear();
+        const opts = RenderOptions(0.3, [8, 8], PuBuGn, "#canvas",
+            function (pixel) {
+                $ts("#MS").clear();
 
-            if (!(pixel.mz)) {
-                $ts("#MS").display("no data at pixel: [" + pixel.x + ", " + pixel.y + "]");
-            } else {
-                const MS = pixel.mz.map(function (mzi, i) { return { mz: mzi, intensity: pixel.intensity[i] } });
+                if (!(pixel.mz)) {
+                    $ts("#MS").display("no data at pixel: [" + pixel.x + ", " + pixel.y + "]");
+                } else {
+                    const MS = pixel.mz.map(function (mzi, i) { return { mz: mzi, intensity: pixel.intensity[i] } });
 
-                $ts("#MS").display("<code>" + JSON.stringify(pixel) + "</code>");
-                $ts.appendTable(MS, "#MS");
-            }
+                    $ts("#MS").display("<code>" + JSON.stringify(pixel) + "</code>");
+                    $ts.appendTable(MS, "#MS");
+                }
 
-        });
+            });
 
-        MSI.renderRGB(741.43, 743.5, 798.4, opts );
+        MSI.renderRGB(741.43, 743.5, 798.4, opts);
 
         const selectMz = document.getElementById("mz");
 
@@ -49,7 +45,7 @@
             selectMz.appendChild($ts("<option>", { value: MSI.mz[i] }).display(MSI.mz[i]));
         }
 
-        $ts("#mz").onchange = function() {
+        $ts("#mz").onchange = function () {
             const mz = $ts.value("#mz")[0];
 
             console.log("select m/z:");

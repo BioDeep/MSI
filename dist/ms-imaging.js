@@ -4,10 +4,30 @@ var MSIRender = /** @class */ (function () {
         this.dimension = { w: w, h: h };
         this.mz = mz;
     }
-    MSIRender.prototype.renderMz = function (mz, da, target) {
-        if (da === void 0) { da = 0.1; }
-        if (target === void 0) { target = "#ms-imaging"; }
-        var layer = this.loadLayer(mz, da);
+    MSIRender.prototype.renderMz = function (mz, opts) {
+        if (opts === void 0) { opts = RenderOptions(); }
+        var layer = this.loadLayer(mz, opts.da, opts.colorSet.length);
+        var scale = opts.scale;
+        var width = this.dimension.w * scale[0];
+        var height = this.dimension.h * scale[1];
+        var svg = new Graphics($ts(opts.target)).size(width, height);
+        var vm = this;
+        var colorSet = opts.colorSet;
+        var _loop_1 = function (p) {
+            var rect = new Canvas.Rectangle((p.x - 1) * scale[0], (p.y - 1) * scale[1], scale[0], scale[1]);
+            var color = new Canvas.Color(colorSet[p.level][0], colorSet[p.level][1], colorSet[p.level][2]);
+            var border = new Canvas.Pen(color, 1);
+            svg.drawRectangle(rect, border, color, function () {
+                var pixel = vm.FindPixel(p.x, p.y);
+                if (opts.handlePixel) {
+                    opts.handlePixel(pixel);
+                }
+            });
+        };
+        for (var _i = 0, layer_1 = layer; _i < layer_1.length; _i++) {
+            var p = layer_1[_i];
+            _loop_1(p);
+        }
     };
     MSIRender.prototype.renderRGB = function (r, g, b, opts) {
         if (opts === void 0) { opts = RenderOptions(); }
@@ -25,7 +45,7 @@ var MSIRender = /** @class */ (function () {
         var height = this.dimension.h * scale[1];
         var svg = new Graphics($ts(opts.target)).size(width, height);
         var vm = this;
-        var _loop_1 = function (p) {
+        var _loop_2 = function (p) {
             var rect = new Canvas.Rectangle((p.x - 1) * scale[0], (p.y - 1) * scale[1], scale[0], scale[1]);
             var color = new Canvas.Color(p.color[0], p.color[1], p.color[2]);
             var border = new Canvas.Pen(color, 1);
@@ -38,7 +58,7 @@ var MSIRender = /** @class */ (function () {
         };
         for (var _i = 0, _a = this.MergeLayers(R, G, B); _i < _a.length; _i++) {
             var p = _a[_i];
-            _loop_1(p);
+            _loop_2(p);
         }
         console.log(svg);
     };
@@ -53,7 +73,7 @@ var MSIRender = /** @class */ (function () {
     };
     MSIRender.prototype.MergeLayers = function (r, g, b) {
         var layer = [];
-        var _loop_2 = function (x) {
+        var _loop_3 = function (x) {
             var rx = $from(r).Where(function (p) { return p.x == x; });
             var gx = $from(g).Where(function (p) { return p.x == x; });
             var bx = $from(b).Where(function (p) { return p.x == x; });
@@ -66,7 +86,7 @@ var MSIRender = /** @class */ (function () {
         };
         var this_1 = this;
         for (var x = 1; x <= this.dimension.w; x++) {
-            _loop_2(x);
+            _loop_3(x);
         }
         return layer;
     };
@@ -79,7 +99,8 @@ var MSIRender = /** @class */ (function () {
             return pixel.level;
         }
     };
-    MSIRender.prototype.loadLayer = function (mz, da) {
+    MSIRender.prototype.loadLayer = function (mz, da, levels) {
+        if (levels === void 0) { levels = 255; }
         var layer = [];
         for (var _i = 0, _a = this.pixels; _i < _a.length; _i++) {
             var pixel = _a[_i];
@@ -92,9 +113,9 @@ var MSIRender = /** @class */ (function () {
         }
         var range = data.NumericRange.Create($from(layer).Select(function (p) { return p.intensity; }));
         var length = range.Length;
-        for (var _b = 0, layer_1 = layer; _b < layer_1.length; _b++) {
-            var p = layer_1[_b];
-            p.level = Math.round(255 * (p.intensity - range.min) / length);
+        for (var _b = 0, layer_2 = layer; _b < layer_2.length; _b++) {
+            var p = layer_2[_b];
+            p.level = Math.round(levels * (p.intensity - range.min) / length);
         }
         return layer;
     };
@@ -111,7 +132,17 @@ var MSIRender = /** @class */ (function () {
     };
     return MSIRender;
 }());
-var PuBuGn = ["rgb(255,247,251)", "rgb(236,226,240)", "rgb(208,209,230)", "rgb(166,189,219)", "rgb(103,169,207)", "rgb(54,144,192)", "rgb(2,129,138)", "rgb(1,108,89)", "rgb(1,70,54)"];
+var PuBuGn = [
+    [255, 247, 251],
+    [236, 226, 240],
+    [208, 209, 230],
+    [166, 189, 219],
+    [103, 169, 207],
+    [54, 144, 192],
+    [2, 129, 138],
+    [1, 108, 89],
+    [1, 70, 54]
+];
 function RenderOptions(da, scale, colorSet, target, handlePixel) {
     if (da === void 0) { da = 0.1; }
     if (scale === void 0) { scale = [5, 5]; }

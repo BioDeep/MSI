@@ -12,12 +12,12 @@ declare class MSIRender {
     pixels: Pixel[];
     readonly mz: number[];
     constructor(mz: number[], pixels: Pixel[], w: number, h: number);
-    renderMz(mz: number, da?: number, target?: string): void;
+    renderMz(mz: number, opts?: IRenderOptions): void;
     renderRGB(r: number, g: number, b: number, opts?: IRenderOptions): void;
     FindPixel(x: number, y: number): Pixel;
     private MergeLayers;
     private static level;
-    loadLayer(mz: number, da: number): PixelData[];
+    loadLayer(mz: number, da: number, levels?: number): PixelData[];
     static PixelValue(pixel: Pixel, mz: number, da: number): number;
 }
 interface IRenderOptions {
@@ -25,10 +25,10 @@ interface IRenderOptions {
     scale: number[];
     target: string;
     handlePixel: ClickPixel;
-    colorSet: string[];
+    colorSet: number[][];
 }
-declare const PuBuGn: string[];
-declare function RenderOptions(da?: number, scale?: number[], colorSet?: string[], target?: string, handlePixel?: ClickPixel): IRenderOptions;
+declare const PuBuGn: number[][];
+declare function RenderOptions(da?: number, scale?: number[], colorSet?: number[][], target?: string, handlePixel?: ClickPixel): IRenderOptions;
 declare function loadNetCDF(url: string, render: (r: MSIRender) => void): void;
 declare function createMSIRender(cdf: NetCDFReader): MSIRender;
 interface Pixel {

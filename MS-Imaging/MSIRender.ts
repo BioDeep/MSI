@@ -11,8 +11,28 @@ class MSIRender {
         this.mz = mz;
     }
 
-    renderMz(mz: number, da: number = 0.1, target = "#ms-imaging") {
-        const layer = this.loadLayer(mz, da);
+    renderMz(mz: number, opts: IRenderOptions = RenderOptions()) {
+        const layer = this.loadLayer(mz, opts.da, opts.colorSet.length);
+        const scale = opts.scale;
+        const width = this.dimension.w * scale[0];
+        const height = this.dimension.h * scale[1];
+        const svg = new Graphics($ts(opts.target)).size(width, height);
+        const vm = this;
+        const colorSet = opts.colorSet;
+
+        for (let p of layer) {
+            const rect = new Canvas.Rectangle((p.x - 1) * scale[0], (p.y - 1) * scale[1], scale[0], scale[1]);
+            const color = new Canvas.Color(colorSet[p.level][0], colorSet[p.level][1], colorSet[p.level][2]);
+            const border = new Canvas.Pen(color, 1);
+
+            svg.drawRectangle(rect, border, color, function () {
+                const pixel: Pixel = vm.FindPixel(p.x, p.y);
+
+                if (opts.handlePixel) {
+                    opts.handlePixel(pixel);
+                }
+            });
+        }
     }
 
     renderRGB(r: number, g: number, b: number, opts: IRenderOptions = RenderOptions()) {
@@ -90,7 +110,7 @@ class MSIRender {
         }
     }
 
-    loadLayer(mz: number, da: number) {
+    loadLayer(mz: number, da: number, levels = 255) {
         const layer: PixelData[] = [];
 
         for (let pixel of this.pixels) {
@@ -107,7 +127,7 @@ class MSIRender {
         const length: number = range.Length;
 
         for (let p of layer) {
-            p.level = Math.round(255 * (p.intensity - range.min) / length);
+            p.level = Math.round(levels * (p.intensity - range.min) / length);
         }
 
         return layer;
