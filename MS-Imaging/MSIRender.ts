@@ -2,7 +2,8 @@ class MSIRender {
 
     dimension: { w: number, h: number };
     pixels: Pixel[];
-    mz: number[];
+
+    public readonly mz: number[];
 
     constructor(mz: number[], pixels: Pixel[], w: number, h: number) {
         this.pixels = pixels;

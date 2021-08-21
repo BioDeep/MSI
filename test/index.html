@@ -6,13 +6,13 @@
 
 <style>
     #canvas {
-        border:           #909090 1px solid;
-        background:       #fff;
-        color:            #333;
-        filter:             progid:DXImageTransform.Microsoft.Shadow(color=#909090, direction=120, strength=4);
-        -moz-box-shadow:    2px 2px 10px #909090;
+        border: #909090 1px solid;
+        background: #fff;
+        color: #333;
+        filter: progid:DXImageTransform.Microsoft.Shadow(color=#909090, direction=120, strength=4);
+        -moz-box-shadow: 2px 2px 10px #909090;
         -webkit-box-shadow: 2px 2px 10px #909090;
-        box-shadow:         4px 9px 20px 5px #909090
+        box-shadow: 4px 9px 20px 5px #909090
     }
 </style>
 
@@ -36,6 +36,12 @@
 
         });
 
+        const selectMz = document.getElementById("mz");
+
+        for (var i = 0; i < MSI.mz.length; i++) {
+            selectMz.appendChild($ts("<option>", { value: MSI.mz[i] }).display(MSI.mz[i]));
+        }
+
         $ts("#png").onclick = function () {
             let svg = document.getElementById("canvas").childNodes.item(0);
 
@@ -43,6 +49,16 @@
         }
     });
 </script>
+
+<div>
+
+    select a m/z layer:
+
+    <select id="mz">
+
+    </select>
+
+</div>
 
 <a href="#" id="png">Download png</a>
 
