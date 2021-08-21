@@ -1,11 +1,18 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
-    "target": "es6",
-    "lib": ["es6"],
-    "sourceMap": true
+    "module": "AMD",
+    "target": "es5",
+    "lib": [ "dom", "es5", "dom.iterable", "scripthost" ],
+    "sourceMap": true,
+    "allowSyntheticDefaultImports": true,
+    "outDir": "../dist",
+    "outFile": "../dist/ms-imaging.js",
+    "declaration": true
   },
   "exclude": [
-    "node_modules"
+    "node_modules",
+	"../node_modules",
+	"obj",
+	"bin"
   ]
 }
