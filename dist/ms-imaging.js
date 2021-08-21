@@ -31,9 +31,9 @@ var MSIRender = /** @class */ (function () {
     };
     MSIRender.prototype.renderRGB = function (r, g, b, opts) {
         if (opts === void 0) { opts = RenderOptions(); }
-        var R = this.loadLayer(r, opts.da, opts.range);
-        var G = this.loadLayer(g, opts.da, opts.range);
-        var B = this.loadLayer(b, opts.da, opts.range);
+        var R = this.loadLayer(r, opts.da, 255, opts.range);
+        var G = this.loadLayer(g, opts.da, 255, opts.range);
+        var B = this.loadLayer(b, opts.da, 255, opts.range);
         console.log("red layer:");
         console.log(R);
         console.log("green layer:");

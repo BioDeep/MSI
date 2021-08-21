@@ -36,9 +36,9 @@ class MSIRender {
     }
 
     renderRGB(r: number, g: number, b: number, opts: IRenderOptions = RenderOptions()) {
-        const R = this.loadLayer(r, opts.da, opts.range);
-        const G = this.loadLayer(g, opts.da, opts.range);
-        const B = this.loadLayer(b, opts.da, opts.range);
+        const R = this.loadLayer(r, opts.da, 255, opts.range);
+        const G = this.loadLayer(g, opts.da, 255, opts.range);
+        const B = this.loadLayer(b, opts.da, 255, opts.range);
 
         console.log("red layer:");
         console.log(R);
