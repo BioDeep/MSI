@@ -9,8 +9,9 @@ var MSIRender = /** @class */ (function () {
         if (target === void 0) { target = "#ms-imaging"; }
         var layer = this.loadLayer(mz, da);
     };
-    MSIRender.prototype.renderRGB = function (r, g, b, da, target) {
+    MSIRender.prototype.renderRGB = function (r, g, b, da, scale, target) {
         if (da === void 0) { da = 0.1; }
+        if (scale === void 0) { scale = [5, 5]; }
         if (target === void 0) { target = "#ms-imaging"; }
         var R = this.loadLayer(r, da);
         var G = this.loadLayer(g, da);
@@ -21,6 +22,39 @@ var MSIRender = /** @class */ (function () {
         console.log(G);
         console.log("blue layer:");
         console.log(B);
+        var width = this.dimension.w * scale[0];
+        var height = this.dimension.h * scale[1];
+        var svg = new Graphics($ts(target)).size(width, height);
+        for (var _i = 0, _a = this.MergeLayers(R, G, B); _i < _a.length; _i++) {
+            var p = _a[_i];
+            var rect = new Canvas.Rectangle((p.x - 1) * scale[0], (p.y - 1) * scale[1], scale[0], scale[1]);
+            var color = new Canvas.Color(p.color[0], p.color[1], p.color[2]);
+            var border = new Canvas.Pen(color, 1);
+            svg.drawRectangle(rect, border, color);
+        }
+        console.log(svg);
+    };
+    MSIRender.prototype.MergeLayers = function (r, g, b) {
+        var layer = [];
+        var _loop_1 = function (x) {
+            var rx = $from(r).Where(function (p) { return p.x == x; });
+            var gx = $from(g).Where(function (p) { return p.x == x; });
+            var bx = $from(b).Where(function (p) { return p.x == x; });
+            var _loop_2 = function (y) {
+                var cr = rx.Where(function (p) { return p.y == y; }).FirstOrDefault() ? .level || 0 : ;
+                var cg = gx.Where(function (p) { return p.y == y; }).FirstOrDefault() ? .level || 0 : ;
+                var cb = bx.Where(function (p) { return p.y == y; }).FirstOrDefault() ? .level || 0 : ;
+                layer.push({ x: x, y: y, color: [cr, cg, cb] });
+            };
+            for (var y = 1; y <= this_1.dimension.h; y++) {
+                _loop_2(y);
+            }
+        };
+        var this_1 = this;
+        for (var x = 1; x <= this.dimension.w; x++) {
+            _loop_1(x);
+        }
+        return layer;
     };
     MSIRender.prototype.loadLayer = function (mz, da) {
         var layer = [];
