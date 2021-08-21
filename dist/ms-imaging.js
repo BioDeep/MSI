@@ -6,7 +6,7 @@ var MSIRender = /** @class */ (function () {
     }
     MSIRender.prototype.renderMz = function (mz, opts) {
         if (opts === void 0) { opts = RenderOptions(); }
-        var layer = this.loadLayer(mz, opts.da, opts.colorSet.length - 1);
+        var layer = this.loadLayer(mz, opts.da, opts.colorSet.length - 1, opts.range);
         var scale = opts.scale;
         var width = this.dimension.w * scale[0];
         var height = this.dimension.h * scale[1];
@@ -31,9 +31,9 @@ var MSIRender = /** @class */ (function () {
     };
     MSIRender.prototype.renderRGB = function (r, g, b, opts) {
         if (opts === void 0) { opts = RenderOptions(); }
-        var R = this.loadLayer(r, opts.da);
-        var G = this.loadLayer(g, opts.da);
-        var B = this.loadLayer(b, opts.da);
+        var R = this.loadLayer(r, opts.da, opts.range);
+        var G = this.loadLayer(g, opts.da, opts.range);
+        var B = this.loadLayer(b, opts.da, opts.range);
         console.log("red layer:");
         console.log(R);
         console.log("green layer:");
@@ -99,9 +99,18 @@ var MSIRender = /** @class */ (function () {
             return pixel.level;
         }
     };
-    MSIRender.prototype.loadLayer = function (mz, da, levels) {
+    MSIRender.prototype.loadLayer = function (mz, da, levels, cut) {
         if (levels === void 0) { levels = 255; }
         var layer = [];
+        var getRange = function (layer) {
+            var range = data.NumericRange.Create($from(layer).Select(function (p) { return p.intensity; }));
+            var length = range.Length;
+            var cutMin = range.min + length * cut[0];
+            var cutMax = range.max + length * cut[1];
+            range.range[0] = cutMin;
+            range.range[1] = cutMax;
+            return range;
+        };
         for (var _i = 0, _a = this.pixels; _i < _a.length; _i++) {
             var pixel = _a[_i];
             var intensity = MSIRender.PixelValue(pixel, mz, da);
@@ -111,11 +120,23 @@ var MSIRender = /** @class */ (function () {
                 });
             }
         }
-        var range = data.NumericRange.Create($from(layer).Select(function (p) { return p.intensity; }));
+        var range = getRange(layer);
         var length = range.Length;
+        var min = range.min;
+        var max = range.max;
         for (var _b = 0, layer_2 = layer; _b < layer_2.length; _b++) {
             var p = layer_2[_b];
-            p.level = Math.round(levels * (p.intensity - range.min) / length);
+            var into = p.intensity;
+            if (into > max) {
+                into = max;
+            }
+            else if (into < min) {
+                into = min;
+            }
+            else {
+                // do nothing
+            }
+            p.level = Math.round(levels * (into - min) / length);
         }
         return layer;
     };
@@ -143,12 +164,13 @@ var Jet = [
     "#FF0000",
     "#7F0000" // dark red
 ];
-function RenderOptions(da, scale, colorSet, target, handlePixel) {
+function RenderOptions(da, scale, colorSet, target, handlePixel, range) {
     if (da === void 0) { da = 0.1; }
     if (scale === void 0) { scale = [5, 5]; }
     if (colorSet === void 0) { colorSet = Jet; }
     if (target === void 0) { target = "#ms-imaging"; }
     if (handlePixel === void 0) { handlePixel = null; }
+    if (range === void 0) { range = [0.2, 0.75]; }
     if (isNullOrUndefined(scale))
         scale = [5, 5];
     return {
@@ -156,7 +178,8 @@ function RenderOptions(da, scale, colorSet, target, handlePixel) {
         scale: scale,
         colorSet: colorSet,
         target: target,
-        handlePixel: handlePixel
+        handlePixel: handlePixel,
+        range: range
     };
 }
 ///<reference path="../dist/netcdf.d.ts" />

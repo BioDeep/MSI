@@ -12,7 +12,7 @@ class MSIRender {
     }
 
     renderMz(mz: number, opts: IRenderOptions = RenderOptions()) {
-        const layer = this.loadLayer(mz, opts.da, opts.colorSet.length - 1);
+        const layer = this.loadLayer(mz, opts.da, opts.colorSet.length - 1, opts.range);
         const scale = opts.scale;
         const width = this.dimension.w * scale[0];
         const height = this.dimension.h * scale[1];
@@ -36,9 +36,9 @@ class MSIRender {
     }
 
     renderRGB(r: number, g: number, b: number, opts: IRenderOptions = RenderOptions()) {
-        const R = this.loadLayer(r, opts.da);
-        const G = this.loadLayer(g, opts.da);
-        const B = this.loadLayer(b, opts.da);
+        const R = this.loadLayer(r, opts.da, opts.range);
+        const G = this.loadLayer(g, opts.da, opts.range);
+        const B = this.loadLayer(b, opts.da, opts.range);
 
         console.log("red layer:");
         console.log(R);
@@ -110,8 +110,19 @@ class MSIRender {
         }
     }
 
-    loadLayer(mz: number, da: number, levels = 255) {
+    loadLayer(mz: number, da: number, levels = 255, cut: number[]) {
         const layer: PixelData[] = [];
+        const getRange = function (layer: PixelData[]) {
+            const range = data.NumericRange.Create($from(layer).Select(p => p.intensity));
+            const length: number = range.Length;
+            const cutMin = range.min + length * cut[0];
+            const cutMax = range.max + length * cut[1];
+
+            range.range[0] = cutMin;
+            range.range[1] = cutMax;
+
+            return range;
+        }
 
         for (let pixel of this.pixels) {
             const intensity: number = MSIRender.PixelValue(pixel, mz, da);
@@ -123,11 +134,23 @@ class MSIRender {
             }
         }
 
-        const range = data.NumericRange.Create($from(layer).Select(p => p.intensity));
+        const range = getRange(layer);
         const length: number = range.Length;
+        const min = range.min;
+        const max = range.max;
 
         for (let p of layer) {
-            p.level = Math.round(levels * (p.intensity - range.min) / length);
+            let into: number = p.intensity;
+
+            if (into > max) {
+                into = max;
+            } else if (into < min) {
+                into = min;
+            } else {
+                // do nothing
+            }
+
+            p.level = Math.round(levels * (into - min) / length);
         }
 
         return layer;

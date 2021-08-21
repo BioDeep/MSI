@@ -5,6 +5,7 @@ interface IRenderOptions {
     target: string;
     handlePixel: ClickPixel;
     colorSet: string[];
+    range: number[];
 
 }
 
@@ -25,7 +26,8 @@ function RenderOptions(
     scale = [5, 5],
     colorSet: string[] = Jet,
     target: string = "#ms-imaging",
-    handlePixel: ClickPixel = null) {
+    handlePixel: ClickPixel = null,
+    range: number[] = [0.2, 0.75]) {
 
     if (isNullOrUndefined(scale)) scale = [5, 5];
 
@@ -34,6 +36,7 @@ function RenderOptions(
         scale: scale,
         colorSet: colorSet,
         target: target,
-        handlePixel: handlePixel
+        handlePixel: handlePixel,
+        range: range
     };
 }

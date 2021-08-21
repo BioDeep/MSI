@@ -17,7 +17,7 @@ declare class MSIRender {
     FindPixel(x: number, y: number): Pixel;
     private MergeLayers;
     private static level;
-    loadLayer(mz: number, da: number, levels?: number): PixelData[];
+    loadLayer(mz: number, da: number, levels: number, cut: number[]): PixelData[];
     static PixelValue(pixel: Pixel, mz: number, da: number): number;
 }
 interface IRenderOptions {
@@ -26,9 +26,10 @@ interface IRenderOptions {
     target: string;
     handlePixel: ClickPixel;
     colorSet: string[];
+    range: number[];
 }
 declare const Jet: string[];
-declare function RenderOptions(da?: number, scale?: number[], colorSet?: string[], target?: string, handlePixel?: ClickPixel): IRenderOptions;
+declare function RenderOptions(da?: number, scale?: number[], colorSet?: string[], target?: string, handlePixel?: ClickPixel, range?: number[]): IRenderOptions;
 declare function loadNetCDF(url: string, render: (r: MSIRender) => void): void;
 declare function createMSIRender(cdf: NetCDFReader, mzErr?: number): MSIRender;
 interface Pixel {
