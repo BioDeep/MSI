@@ -30,7 +30,7 @@ interface IRenderOptions {
 declare const PuBuGn: number[][];
 declare function RenderOptions(da?: number, scale?: number[], colorSet?: number[][], target?: string, handlePixel?: ClickPixel): IRenderOptions;
 declare function loadNetCDF(url: string, render: (r: MSIRender) => void): void;
-declare function createMSIRender(cdf: NetCDFReader): MSIRender;
+declare function createMSIRender(cdf: NetCDFReader, mzErr?: number): MSIRender;
 interface Pixel {
     x: number;
     y: number;

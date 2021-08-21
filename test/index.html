@@ -22,7 +22,7 @@
     loadNetCDF("./HR2MSI mouse urinary bladder S096 - Figure1.cdf", function (MSI) {
         console.log(MSI);
 
-        const opts = RenderOptions(0.3, [8, 8], PuBuGn, "#canvas",
+        const opts = RenderOptions(0.5, [6, 6], PuBuGn, "#canvas",
             function (pixel) {
                 $ts("#MS").clear();
 
@@ -51,7 +51,7 @@
             console.log("select m/z:");
             console.log(mz);
 
-
+            MSI.renderMz(mz, opts);
         }
 
         $ts("#png").onclick = function () {

@@ -6,11 +6,11 @@ var MSIRender = /** @class */ (function () {
     }
     MSIRender.prototype.renderMz = function (mz, opts) {
         if (opts === void 0) { opts = RenderOptions(); }
-        var layer = this.loadLayer(mz, opts.da, opts.colorSet.length);
+        var layer = this.loadLayer(mz, opts.da, opts.colorSet.length - 1);
         var scale = opts.scale;
         var width = this.dimension.w * scale[0];
         var height = this.dimension.h * scale[1];
-        var svg = new Graphics($ts(opts.target)).size(width, height);
+        var svg = new Graphics($ts(opts.target).clear()).size(width, height);
         var vm = this;
         var colorSet = opts.colorSet;
         var _loop_1 = function (p) {
@@ -43,7 +43,7 @@ var MSIRender = /** @class */ (function () {
         var scale = opts.scale;
         var width = this.dimension.w * scale[0];
         var height = this.dimension.h * scale[1];
-        var svg = new Graphics($ts(opts.target)).size(width, height);
+        var svg = new Graphics($ts(opts.target).clear()).size(width, height);
         var vm = this;
         var _loop_2 = function (p) {
             var rect = new Canvas.Rectangle((p.x - 1) * scale[0], (p.y - 1) * scale[1], scale[0], scale[1]);
@@ -165,7 +165,8 @@ function RenderOptions(da, scale, colorSet, target, handlePixel) {
 function loadNetCDF(url, render) {
     NetCDFReader.fetch(url, function (cdf) { return render(createMSIRender(cdf)); });
 }
-function createMSIRender(cdf) {
+function createMSIRender(cdf, mzErr) {
+    if (mzErr === void 0) { mzErr = 0.3; }
     var mz = cdf.getDataVariable("mz");
     var intensity = cdf.getDataVariable("intensity");
     var x = cdf.getDataVariable("x");
@@ -186,7 +187,7 @@ function createMSIRender(cdf) {
         .ToArray();
     var w = parseInt(cdf.getAttribute("width").toString());
     var h = parseInt(cdf.getAttribute("height").toString());
-    var uniqMz = $from(TypeScript.Data.group(mz, 0.1))
+    var uniqMz = $from(TypeScript.Data.group(mz, mzErr))
         .Select(function (i) { return i.Key; })
         .OrderBy(function (x) { return x; })
         .ToArray();

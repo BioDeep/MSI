@@ -12,11 +12,11 @@ class MSIRender {
     }
 
     renderMz(mz: number, opts: IRenderOptions = RenderOptions()) {
-        const layer = this.loadLayer(mz, opts.da, opts.colorSet.length);
+        const layer = this.loadLayer(mz, opts.da, opts.colorSet.length - 1);
         const scale = opts.scale;
         const width = this.dimension.w * scale[0];
         const height = this.dimension.h * scale[1];
-        const svg = new Graphics($ts(opts.target)).size(width, height);
+        const svg = new Graphics($ts(opts.target).clear()).size(width, height);
         const vm = this;
         const colorSet = opts.colorSet;
 
@@ -50,7 +50,7 @@ class MSIRender {
         const scale = opts.scale;
         const width = this.dimension.w * scale[0];
         const height = this.dimension.h * scale[1];
-        const svg = new Graphics($ts(opts.target)).size(width, height);
+        const svg = new Graphics($ts(opts.target).clear()).size(width, height);
         const vm = this;
 
         for (let p of this.MergeLayers(R, G, B)) {

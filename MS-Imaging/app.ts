@@ -6,7 +6,7 @@ function loadNetCDF(url: string, render: (r: MSIRender) => void) {
     NetCDFReader.fetch(url, cdf => render(createMSIRender(cdf)));
 }
 
-function createMSIRender(cdf: NetCDFReader): MSIRender {
+function createMSIRender(cdf: NetCDFReader, mzErr: number = 0.3): MSIRender {
     const mz: number[] = <any>cdf.getDataVariable("mz");
     const intensity: number[] = <any>cdf.getDataVariable("intensity");
     const x: number[] = <any>cdf.getDataVariable("x");
@@ -27,7 +27,7 @@ function createMSIRender(cdf: NetCDFReader): MSIRender {
         .ToArray();
     const w: number = parseInt(cdf.getAttribute("width").toString());
     const h: number = parseInt(cdf.getAttribute("height").toString());
-    const uniqMz = $from(TypeScript.Data.group(mz, 0.1))
+    const uniqMz = $from(TypeScript.Data.group(mz, mzErr))
         .Select(i => i.Key)
         .OrderBy(x => x)
         .ToArray();
