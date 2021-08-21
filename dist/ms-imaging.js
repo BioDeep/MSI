@@ -34,9 +34,8 @@ function createMSIRender(cdf) {
         };
     })
         .ToArray();
-    var w = 0;
-    var h = 0;
-    console.log(cdf);
+    var w = parseInt(cdf.getAttribute("width").toString());
+    var h = parseInt(cdf.getAttribute("height").toString());
     return new MSIRender(pixels, w, h);
 }
 var mzPack = /** @class */ (function () {

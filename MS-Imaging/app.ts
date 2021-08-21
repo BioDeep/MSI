@@ -25,10 +25,8 @@ function createMSIRender(cdf: NetCDFReader): MSIRender {
             }
         })
         .ToArray();
-    const w: number = 0;
-    const h: number = 0;
-
-    console.log(cdf);
+    const w: number = parseInt(cdf.getAttribute("width").toString());
+    const h: number = parseInt(cdf.getAttribute("height").toString());
 
     return new MSIRender(pixels, w, h);
 }
