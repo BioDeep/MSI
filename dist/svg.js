@@ -284,7 +284,7 @@ var Graphics = /** @class */ (function () {
     */
     function Graphics(div) {
         this.svg = SvgUtils.svgNode("svg", { "version": "1.1" });
-        this.container = document.getElementById(div);
+        this.container = typeof div == "string" ? document.getElementById(div) : div;
         this.container.appendChild(this.svg);
     }
     /**

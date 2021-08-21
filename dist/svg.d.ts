@@ -149,7 +149,7 @@ declare class Graphics {
      *
      * @param div div id
     */
-    constructor(div: string);
+    constructor(div: string | HTMLElement);
     /**
      * Set the size value of the svg canvas
     */
