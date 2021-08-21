@@ -22,7 +22,7 @@ class MSIRender {
 
         for (let p of layer) {
             const rect = new Canvas.Rectangle((p.x - 1) * scale[0], (p.y - 1) * scale[1], scale[0], scale[1]);
-            const color = new Canvas.Color(colorSet[p.level][0], colorSet[p.level][1], colorSet[p.level][2]);
+            const color = Canvas.Color.FromHtmlColor(colorSet[p.level]);
             const border = new Canvas.Pen(color, 1);
 
             svg.drawRectangle(rect, border, color, function () {

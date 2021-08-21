@@ -15,7 +15,7 @@ var MSIRender = /** @class */ (function () {
         var colorSet = opts.colorSet;
         var _loop_1 = function (p) {
             var rect = new Canvas.Rectangle((p.x - 1) * scale[0], (p.y - 1) * scale[1], scale[0], scale[1]);
-            var color = new Canvas.Color(colorSet[p.level][0], colorSet[p.level][1], colorSet[p.level][2]);
+            var color = Canvas.Color.FromHtmlColor(colorSet[p.level]);
             var border = new Canvas.Pen(color, 1);
             svg.drawRectangle(rect, border, color, function () {
                 var pixel = vm.FindPixel(p.x, p.y);
@@ -132,21 +132,21 @@ var MSIRender = /** @class */ (function () {
     };
     return MSIRender;
 }());
-var PuBuGn = [
-    [255, 247, 251],
-    [236, 226, 240],
-    [208, 209, 230],
-    [166, 189, 219],
-    [103, 169, 207],
-    [54, 144, 192],
-    [2, 129, 138],
-    [1, 108, 89],
-    [1, 70, 54]
+var Jet = [
+    "#00007F",
+    "#0000FF",
+    "#007FFF",
+    "#00FFFF",
+    "#7FFF7F",
+    "#FFFF00",
+    "#FF7F00",
+    "#FF0000",
+    "#7F0000" // dark red
 ];
 function RenderOptions(da, scale, colorSet, target, handlePixel) {
     if (da === void 0) { da = 0.1; }
     if (scale === void 0) { scale = [5, 5]; }
-    if (colorSet === void 0) { colorSet = PuBuGn; }
+    if (colorSet === void 0) { colorSet = Jet; }
     if (target === void 0) { target = "#ms-imaging"; }
     if (handlePixel === void 0) { handlePixel = null; }
     if (isNullOrUndefined(scale))

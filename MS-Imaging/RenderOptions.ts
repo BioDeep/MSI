@@ -4,26 +4,26 @@ interface IRenderOptions {
     scale: number[];
     target: string;
     handlePixel: ClickPixel;
-    colorSet: number[][];
+    colorSet: string[];
 
 }
 
-const PuBuGn = [
-    [255, 247, 251],
-    [236, 226, 240],
-    [208, 209, 230],
-    [166, 189, 219],
-    [103, 169, 207],
-    [54, 144, 192],
-    [2, 129, 138],
-    [1, 108, 89],
-    [1, 70, 54]
+const Jet: string[] = [
+    "#00007F",// dark blue
+    "#0000FF",// blue
+    "#007FFF",// azure
+    "#00FFFF",// cyan
+    "#7FFF7F",// light green
+    "#FFFF00",// yellow
+    "#FF7F00",// orange
+    "#FF0000",// red
+    "#7F0000" // dark red
 ];
 
 function RenderOptions(
     da: number = 0.1,
     scale = [5, 5],
-    colorSet: number[][] = PuBuGn,
+    colorSet: string[] = Jet,
     target: string = "#ms-imaging",
     handlePixel: ClickPixel = null) {
 
