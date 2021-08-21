@@ -33,7 +33,7 @@ var MSIRender = /** @class */ (function () {
             var border = new Canvas.Pen(color, 1);
             svg.drawRectangle(rect, border, color, function () {
                 var pixel = vm.FindPixel(p.x, p.y);
-                if ((!pixel) && (!handlePixel)) {
+                if (handlePixel) {
                     handlePixel(pixel);
                 }
             });
@@ -51,7 +51,7 @@ var MSIRender = /** @class */ (function () {
                 return p;
             }
         }
-        return null;
+        return { x: x, y: y, mz: null, intensity: null };
     };
     MSIRender.prototype.MergeLayers = function (r, g, b) {
         var layer = [];

@@ -39,7 +39,7 @@ class MSIRender {
             svg.drawRectangle(rect, border, color, function () {
                 const pixel: Pixel = vm.FindPixel(p.x, p.y);
 
-                if ((!pixel) && (!handlePixel)) {
+                if (handlePixel) {
                     handlePixel(pixel);
                 }
             });
@@ -55,7 +55,7 @@ class MSIRender {
             }
         }
 
-        return null;
+        return <Pixel>{ x: x, y: y, mz: null, intensity: null };
     }
 
     private MergeLayers(r: PixelData[], g: PixelData[], b: PixelData[]) {

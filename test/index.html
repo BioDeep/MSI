@@ -4,13 +4,37 @@
 <script src="../dist/netcdf.js"></script>
 <script src="../dist/ms-imaging.js"></script>
 
+<style>
+    #canvas {
+        border:           #909090 1px solid;
+        background:       #fff;
+        color:            #333;
+        filter:             progid:DXImageTransform.Microsoft.Shadow(color=#909090, direction=120, strength=4);
+        -moz-box-shadow:    2px 2px 10px #909090;
+        -webkit-box-shadow: 2px 2px 10px #909090;
+        box-shadow:         4px 9px 20px 5px #909090
+    }
+</style>
+
 <div id="canvas"></div>
 
 <script>
     loadNetCDF("./HR2MSI mouse urinary bladder S096 - Figure1.cdf", function (MSI) {
         console.log(MSI);
 
-        MSI.renderRGB(741.43, 743.5, 798.4, 0.3, [5, 5], "#canvas");
+        MSI.renderRGB(741.43, 743.5, 798.4, 0.3, [5, 5], "#canvas", function (pixel) {
+            $ts("#MS").clear();
+
+            if (!(pixel.mz)) {
+                $ts("#MS").display("no data at pixel: [" + pixel.x + ", " + pixel.y + "]");
+            } else {
+                const MS = pixel.mz.map(function (mzi, i) { return { mz: mzi, intensity: pixel.intensity[i] } });
+
+                $ts("#MS").display("<code>" + JSON.stringify(pixel) + "</code>");
+                $ts.appendTable(MS, "#MS");
+            }
+
+        });
 
         $ts("#png").onclick = function () {
             let svg = document.getElementById("canvas").childNodes.item(0);
@@ -21,3 +45,8 @@
 </script>
 
 <a href="#" id="png">Download png</a>
+
+<div id="MS">
+
+
+</div>
