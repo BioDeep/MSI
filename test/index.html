@@ -1,0 +1,10 @@
+<script src="../dist/netcdf.js"></script>
+
+<script>
+    NetCDFReader.fetch("./HR2MSI mouse urinary bladder S096 - Figure1.cdf", function (cdf) {
+        console.log(cdf);
+
+        console.log("mz vector:");
+        console.log(cdf.getDataVariable("mz"));
+    });
+</script>
