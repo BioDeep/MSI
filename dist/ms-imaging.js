@@ -33,6 +33,12 @@ var MSIRender = /** @class */ (function () {
                 });
             }
         }
+        var range = data.NumericRange.Create($from(layer).Select(function (p) { return p.intensity; }));
+        var length = range.Length;
+        for (var _b = 0, layer_1 = layer; _b < layer_1.length; _b++) {
+            var p = layer_1[_b];
+            p.level = Math.round(255 * (p.intensity - range.min) / length);
+        }
         return layer;
     };
     MSIRender.PixelValue = function (pixel, mz, da) {

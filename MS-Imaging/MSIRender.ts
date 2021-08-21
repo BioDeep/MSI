@@ -42,6 +42,13 @@ class MSIRender {
             }
         }
 
+        const range = data.NumericRange.Create($from(layer).Select(p => p.intensity));
+        const length: number = range.Length;
+
+        for (let p of layer) {
+            p.level = Math.round(255 * (p.intensity - range.min) / length);
+        }
+
         return layer;
     }
 

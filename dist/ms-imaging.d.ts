@@ -26,6 +26,7 @@ interface PixelData {
     x: number;
     y: number;
     intensity: number;
+    level: number;
 }
 declare class mzPack {
 }
