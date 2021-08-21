@@ -10,16 +10,25 @@ declare class MSIRender {
         h: number;
     };
     pixels: Pixel[];
-    mz: number[];
+    readonly mz: number[];
     constructor(mz: number[], pixels: Pixel[], w: number, h: number);
     renderMz(mz: number, da?: number, target?: string): void;
-    renderRGB(r: number, g: number, b: number, da?: number, scale?: number[], target?: string, handlePixel?: ClickPixel): void;
+    renderRGB(r: number, g: number, b: number, opts?: IRenderOptions): void;
     FindPixel(x: number, y: number): Pixel;
     private MergeLayers;
     private static level;
     loadLayer(mz: number, da: number): PixelData[];
     static PixelValue(pixel: Pixel, mz: number, da: number): number;
 }
+interface IRenderOptions {
+    da: number;
+    scale: number[];
+    target: string;
+    handlePixel: ClickPixel;
+    colorSet: string[];
+}
+declare const PuBuGn: string[];
+declare function RenderOptions(da?: number, scale?: number[], colorSet?: string[], target?: string, handlePixel?: ClickPixel): IRenderOptions;
 declare function loadNetCDF(url: string, render: (r: MSIRender) => void): void;
 declare function createMSIRender(cdf: NetCDFReader): MSIRender;
 interface Pixel {

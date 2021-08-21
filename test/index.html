@@ -22,7 +22,12 @@
     loadNetCDF("./HR2MSI mouse urinary bladder S096 - Figure1.cdf", function (MSI) {
         console.log(MSI);
 
-        MSI.renderRGB(741.43, 743.5, 798.4, 0.3, [5, 5], "#canvas", function (pixel) {
+        const opts = RenderOptions(
+     0.3,
+     [8, 8],
+     PuBuGn,
+     "#canvas",
+     function (pixel) {
             $ts("#MS").clear();
 
             if (!(pixel.mz)) {
@@ -36,10 +41,21 @@
 
         });
 
+        MSI.renderRGB(741.43, 743.5, 798.4, opts );
+
         const selectMz = document.getElementById("mz");
 
         for (var i = 0; i < MSI.mz.length; i++) {
             selectMz.appendChild($ts("<option>", { value: MSI.mz[i] }).display(MSI.mz[i]));
+        }
+
+        $ts("#mz").onchange = function() {
+            const mz = $ts.value("#mz")[0];
+
+            console.log("select m/z:");
+            console.log(mz);
+
+
         }
 
         $ts("#png").onclick = function () {

@@ -9,23 +9,21 @@ var MSIRender = /** @class */ (function () {
         if (target === void 0) { target = "#ms-imaging"; }
         var layer = this.loadLayer(mz, da);
     };
-    MSIRender.prototype.renderRGB = function (r, g, b, da, scale, target, handlePixel) {
-        if (da === void 0) { da = 0.1; }
-        if (scale === void 0) { scale = [5, 5]; }
-        if (target === void 0) { target = "#ms-imaging"; }
-        if (handlePixel === void 0) { handlePixel = null; }
-        var R = this.loadLayer(r, da);
-        var G = this.loadLayer(g, da);
-        var B = this.loadLayer(b, da);
+    MSIRender.prototype.renderRGB = function (r, g, b, opts) {
+        if (opts === void 0) { opts = RenderOptions(); }
+        var R = this.loadLayer(r, opts.da);
+        var G = this.loadLayer(g, opts.da);
+        var B = this.loadLayer(b, opts.da);
         console.log("red layer:");
         console.log(R);
         console.log("green layer:");
         console.log(G);
         console.log("blue layer:");
         console.log(B);
+        var scale = opts.scale;
         var width = this.dimension.w * scale[0];
         var height = this.dimension.h * scale[1];
-        var svg = new Graphics($ts(target)).size(width, height);
+        var svg = new Graphics($ts(opts.target)).size(width, height);
         var vm = this;
         var _loop_1 = function (p) {
             var rect = new Canvas.Rectangle((p.x - 1) * scale[0], (p.y - 1) * scale[1], scale[0], scale[1]);
@@ -33,8 +31,8 @@ var MSIRender = /** @class */ (function () {
             var border = new Canvas.Pen(color, 1);
             svg.drawRectangle(rect, border, color, function () {
                 var pixel = vm.FindPixel(p.x, p.y);
-                if (handlePixel) {
-                    handlePixel(pixel);
+                if (opts.handlePixel) {
+                    opts.handlePixel(pixel);
                 }
             });
         };
@@ -113,6 +111,23 @@ var MSIRender = /** @class */ (function () {
     };
     return MSIRender;
 }());
+var PuBuGn = ["rgb(255,247,251)", "rgb(236,226,240)", "rgb(208,209,230)", "rgb(166,189,219)", "rgb(103,169,207)", "rgb(54,144,192)", "rgb(2,129,138)", "rgb(1,108,89)", "rgb(1,70,54)"];
+function RenderOptions(da, scale, colorSet, target, handlePixel) {
+    if (da === void 0) { da = 0.1; }
+    if (scale === void 0) { scale = [5, 5]; }
+    if (colorSet === void 0) { colorSet = PuBuGn; }
+    if (target === void 0) { target = "#ms-imaging"; }
+    if (handlePixel === void 0) { handlePixel = null; }
+    if (isNullOrUndefined(scale))
+        scale = [5, 5];
+    return {
+        da: da,
+        scale: scale,
+        colorSet: colorSet,
+        target: target,
+        handlePixel: handlePixel
+    };
+}
 ///<reference path="../dist/netcdf.d.ts" />
 ///<reference path="../dist/linq.d.ts" />
 ///<reference path="../dist/svg.d.ts" />

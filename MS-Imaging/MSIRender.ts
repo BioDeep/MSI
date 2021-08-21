@@ -15,10 +15,10 @@ class MSIRender {
         const layer = this.loadLayer(mz, da);
     }
 
-    renderRGB(r: number, g: number, b: number, da: number = 0.1, scale = [5, 5], target: string = "#ms-imaging", handlePixel: ClickPixel = null) {
-        const R = this.loadLayer(r, da);
-        const G = this.loadLayer(g, da);
-        const B = this.loadLayer(b, da);
+    renderRGB(r: number, g: number, b: number, opts: IRenderOptions = RenderOptions()) {
+        const R = this.loadLayer(r, opts.da);
+        const G = this.loadLayer(g, opts.da);
+        const B = this.loadLayer(b, opts.da);
 
         console.log("red layer:");
         console.log(R);
@@ -27,9 +27,10 @@ class MSIRender {
         console.log("blue layer:");
         console.log(B);
 
+        const scale = opts.scale;
         const width = this.dimension.w * scale[0];
         const height = this.dimension.h * scale[1];
-        const svg = new Graphics($ts(target)).size(width, height);
+        const svg = new Graphics($ts(opts.target)).size(width, height);
         const vm = this;
 
         for (let p of this.MergeLayers(R, G, B)) {
@@ -40,8 +41,8 @@ class MSIRender {
             svg.drawRectangle(rect, border, color, function () {
                 const pixel: Pixel = vm.FindPixel(p.x, p.y);
 
-                if (handlePixel) {
-                    handlePixel(pixel);
+                if (opts.handlePixel) {
+                    opts.handlePixel(pixel);
                 }
             });
         }
