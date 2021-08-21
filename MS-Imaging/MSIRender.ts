@@ -14,6 +14,21 @@ class MSIRender {
         const layer = this.loadLayer(mz, da);
     }
 
+    renderRGB(r: number, g: number, b: number, da: number = 0.1, target: string = "#ms-imaging") {
+        const R = this.loadLayer(r, da);
+        const G = this.loadLayer(g, da);
+        const B = this.loadLayer(b, da);
+
+        console.log("red layer:");
+        console.log(R);
+        console.log("green layer:");
+        console.log(G);
+        console.log("blue layer:");
+        console.log(B);
+
+
+    }
+
     loadLayer(mz: number, da: number) {
         const layer: PixelData[] = [];
 

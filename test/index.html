@@ -4,8 +4,12 @@
 <script src="../dist/netcdf.js"></script>
 <script src="../dist/ms-imaging.js"></script>
 
+<div id="canvas"></div>
+
 <script>
     loadNetCDF("./HR2MSI mouse urinary bladder S096 - Figure1.cdf", function (MSI) {
         console.log(MSI);
+
+        MSI.renderRGB(741.43, 743.5, 798.4, 0.3, "#canvas");
     });
 </script>

@@ -9,6 +9,19 @@ var MSIRender = /** @class */ (function () {
         if (target === void 0) { target = "#ms-imaging"; }
         var layer = this.loadLayer(mz, da);
     };
+    MSIRender.prototype.renderRGB = function (r, g, b, da, target) {
+        if (da === void 0) { da = 0.1; }
+        if (target === void 0) { target = "#ms-imaging"; }
+        var R = this.loadLayer(r, da);
+        var G = this.loadLayer(g, da);
+        var B = this.loadLayer(b, da);
+        console.log("red layer:");
+        console.log(R);
+        console.log("green layer:");
+        console.log(G);
+        console.log("blue layer:");
+        console.log(B);
+    };
     MSIRender.prototype.loadLayer = function (mz, da) {
         var layer = [];
         for (var _i = 0, _a = this.pixels; _i < _a.length; _i++) {
