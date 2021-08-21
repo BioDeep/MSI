@@ -34,6 +34,20 @@
     <Content Include="README.md" />
     <Content Include="tsconfig.json" />
   </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="MSIRender.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="mzPack\mzPack.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="mzPack\Pixel.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="mzPack\" />
+  </ItemGroup>
   <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsToolsV2.targets" />
   <ProjectExtensions>
     <VisualStudio>

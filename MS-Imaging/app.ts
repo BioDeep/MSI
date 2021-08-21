@@ -1,1 +1,1 @@
-console.log('Hello world');
+///<reference path="../dist/netcdf.d.ts" />
