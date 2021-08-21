@@ -11,5 +11,13 @@
         console.log(MSI);
 
         MSI.renderRGB(741.43, 743.5, 798.4, 0.3, [5, 5], "#canvas");
+
+        $ts("#png").onclick = function () {
+            let svg = document.getElementById("canvas").childNodes.item(0);
+
+            CanvasHelper.saveSvgAsPng.Encoder.saveSvgAsPng(svg, "MSI");
+        }
     });
 </script>
+
+<a href="#" id="png">Download png</a>
