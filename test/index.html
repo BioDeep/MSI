@@ -37,7 +37,7 @@
 
             });
 
-        MSI.renderRGB(741.43, 743.5, 798.4, opts);
+        MSI.renderRGB(MSI.mz[0], MSI.mz[1], MSI.mz[2], opts);
 
         const selectMz = document.getElementById("mz");
 
@@ -57,12 +57,24 @@
         $ts("#png").onclick = function () {
             let svg = document.getElementById("canvas").childNodes.item(0);
 
-            CanvasHelper.saveSvgAsPng.Encoder.saveSvgAsPng(svg, "MSI");
+            CanvasHelper.saveSvgAsPng.Encoder.saveSvgAsPng(svg, "HR2MSI mouse urinary bladder S096 - Figure1");
+        }
+
+        $ts("#setR").onclick = function () { $ts("#rVal").display($ts.value("#mz")[0]); }
+        $ts("#setG").onclick = function () { $ts("#gVal").display($ts.value("#mz")[0]); }
+        $ts("#setB").onclick = function () { $ts("#bVal").display($ts.value("#mz")[0]); }
+
+        $ts("#rgb").onclick = function () {
+            const r = parseFloat($ts("#rVal").innerText);
+            const g = parseFloat($ts("#gVal").innerText);
+            const b = parseFloat($ts("#bVal").innerText);
+
+            MSI.renderRGB(r, g, b, opts);
         }
     });
 </script>
 
-<div>
+<div style="margin-top: 2.5%;">
 
     select a m/z layer:
 
@@ -70,7 +82,14 @@
 
     </select>
 
+    <div><a href="#" id="setR">red</a><span id="rVal"></span></div>
+    <div><a href="#" id="setG">green</a><span id="gVal"></span></div>
+    <div><a href="#" id="setB">blue</a><span id="bVal"></span></div>
+
+    <button id="rgb">Render RGB</button>
 </div>
+
+<hr />
 
 <a href="#" id="png">Download png</a>
 
