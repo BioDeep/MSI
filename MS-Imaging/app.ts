@@ -27,7 +27,10 @@ function createMSIRender(cdf: NetCDFReader): MSIRender {
         .ToArray();
     const w: number = parseInt(cdf.getAttribute("width").toString());
     const h: number = parseInt(cdf.getAttribute("height").toString());
-    const uniqMz = $from(TypeScript.Data.group(mz, 0.05)).Select(i => i.Key).ToArray();
+    const uniqMz = $from(TypeScript.Data.group(mz, 0.1))
+        .Select(i => i.Key)
+        .OrderBy(x => x)
+        .ToArray();
 
     return new MSIRender(uniqMz, pixels, w, h);
 }

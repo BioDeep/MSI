@@ -62,7 +62,10 @@ function createMSIRender(cdf) {
         .ToArray();
     var w = parseInt(cdf.getAttribute("width").toString());
     var h = parseInt(cdf.getAttribute("height").toString());
-    var uniqMz = $from(TypeScript.Data.group(mz, 0.05)).Select(function (i) { return i.Key; }).ToArray();
+    var uniqMz = $from(TypeScript.Data.group(mz, 0.1))
+        .Select(function (i) { return i.Key; })
+        .OrderBy(function (x) { return x; })
+        .ToArray();
     return new MSIRender(uniqMz, pixels, w, h);
 }
 var mzPack = /** @class */ (function () {
