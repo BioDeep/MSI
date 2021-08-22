@@ -4,6 +4,12 @@ var MSIRender = /** @class */ (function () {
         this.dimension = { w: w, h: h };
         this.mz = mz;
     }
+    MSIRender.prototype.measureCanvasSize = function (opts) {
+        return [
+            this.dimension.w * opts.scale[0],
+            this.dimension.h * opts.scale[1]
+        ];
+    };
     MSIRender.prototype.renderMz = function (mz, opts) {
         if (opts === void 0) { opts = RenderOptions(); }
         var layer = this.loadLayer(mz, opts.da, opts.colorSet.length - 1, opts.range);

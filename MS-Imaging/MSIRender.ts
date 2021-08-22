@@ -11,6 +11,13 @@ class MSIRender {
         this.mz = mz;
     }
 
+    measureCanvasSize(opts: IRenderOptions) {
+        return [
+            this.dimension.w * opts.scale[0],
+            this.dimension.h * opts.scale[1]
+        ];
+    }
+
     renderMz(mz: number, opts: IRenderOptions = RenderOptions()) {
         const layer = this.loadLayer(mz, opts.da, opts.colorSet.length - 1, opts.range);
         const scale = opts.scale;

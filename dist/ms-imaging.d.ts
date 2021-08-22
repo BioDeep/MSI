@@ -12,6 +12,7 @@ declare class MSIRender {
     pixels: Pixel[];
     readonly mz: number[];
     constructor(mz: number[], pixels: Pixel[], w: number, h: number);
+    measureCanvasSize(opts: IRenderOptions): number[];
     renderMz(mz: number, opts?: IRenderOptions): void;
     renderRGB(r: number, g: number, b: number, opts?: IRenderOptions): void;
     FindPixel(x: number, y: number): Pixel;

@@ -40,6 +40,10 @@
         MSI.renderRGB(MSI.mz[0], MSI.mz[1], MSI.mz[2], opts);
 
         const selectMz = document.getElementById("mz");
+		const size = MSI.measureCanvasSize(opts);
+
+		document.getElementById("canvas").style.width = size[0];
+		document.getElementById("canvas").style.height = size[1];
 
         for (var i = 0; i < MSI.mz.length; i++) {
             selectMz.appendChild($ts("<option>", { value: MSI.mz[i] }).display(MSI.mz[i]));
