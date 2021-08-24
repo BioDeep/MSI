@@ -43,9 +43,9 @@ class MSIRender {
     }
 
     renderRGB(r: number, g: number, b: number, opts: IRenderOptions = RenderOptions()) {
-        const R = this.loadLayer(r, opts.da, 255, opts.range);
-        const G = this.loadLayer(g, opts.da, 255, opts.range);
-        const B = this.loadLayer(b, opts.da, 255, opts.range);
+        const R: PixelData[] = this.loadLayer(r, opts.da, 255, opts.range);
+        const G: PixelData[] = this.loadLayer(g, opts.da, 255, opts.range);
+        const B: PixelData[] = this.loadLayer(b, opts.da, 255, opts.range);
 
         console.log("red layer:");
         console.log(R);
@@ -54,11 +54,11 @@ class MSIRender {
         console.log("blue layer:");
         console.log(B);
 
-        const scale = opts.scale;
-        const width = this.dimension.w * scale[0];
-        const height = this.dimension.h * scale[1];
-        const svg = new Graphics($ts(opts.target).clear()).size(width, height);
-        const vm = this;
+        const scale: number[] = opts.scale;
+        const width: number = this.dimension.w * scale[0];
+        const height: number = this.dimension.h * scale[1];
+        const svg: Graphics = new Graphics($ts(opts.target).clear()).size(width, height);
+        const vm: MSIRender = this;
 
         for (let p of this.MergeLayers(R, G, B)) {
             const rect = new Canvas.Rectangle((p.x - 1) * scale[0], (p.y - 1) * scale[1], scale[0], scale[1]);
@@ -73,8 +73,6 @@ class MSIRender {
                 }
             });
         }
-
-        console.log(svg);
     }
 
     FindPixel(x: number, y: number): Pixel {
